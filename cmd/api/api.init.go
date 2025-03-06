@@ -8,9 +8,29 @@ import (
 	"github.com/joho/godotenv"
 	"github.com/pinjoc-labs/back-end/internal/env"
 	"github.com/pinjoc-labs/back-end/internal/handler"
+	"github.com/pinjoc-labs/back-end/internal/service"
 	"github.com/pinjoc-labs/back-end/lib/config"
 	"github.com/pinjoc-labs/back-end/lib/db/postgres"
+	"github.com/robfig/cron/v3"
 )
+
+func InitRandom(svc service.Service) {
+	c := cron.New(cron.WithSeconds())
+
+	// Jalankan setiap 30 detik
+	_, err := c.AddFunc("*/30 * * * * *", func() {
+		log.Println("Running RandomUpdate...")
+		svc.CLOB.RandomUpdate(context.Background())
+		svc.Tokenized.RandomUpdate(context.Background())
+		svc.Tokenized.RandomVolume(context.Background())
+	})
+
+	if err != nil {
+		log.Fatalf("Failed to initialize cron job: %v", err)
+	}
+
+	c.Start() // Mulai cron job
+}
 
 func InitConfig() config.Config {
 	err := godotenv.Load()
@@ -59,6 +79,9 @@ func InitServer() {
 
 	app := NewApp(appConfig)
 	app.RegisterRoute()
+
+	svc := service.NewService(db)
+	InitRandom(svc)
 
 	if err := app.Run(); err != nil {
 		log.Fatalf("failed start server %v", err)
