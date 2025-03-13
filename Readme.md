@@ -1,5 +1,5 @@
 # CLOB Pinjoc Protocol - Dynamic Lending Protocol
-We are trying to build CLOB Pinjoc Protocol. Specifically dynamic lending protocol based on supply and demand. This yield rate will be the one that will be traded. Can you help me to change our topics into CLOB Pinjoc Protocol
+We are trying to build CLOB Pinjoc Protocol. Specifically dynamic lending protocol based on supply and demand. This yield rate will be the one that will be traded.
 
 ## Overview
 A backend service built with Go and PostgreSQL that provides dummy data simulation through APIs to demonstrate a Central Limit Order Book (CLOB) for lending/borrowing operations. This service is designed to be consumed by frontend applications to simulate supply-demand based lending protocols.
